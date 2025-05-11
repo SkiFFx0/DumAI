@@ -1,0 +1,39 @@
+version: '3.8'  # Using Docker Compose schema version 3.8
+
+services:
+  postgres:
+    image: postgres:15  # Use PostgreSQL 15
+    environment:
+      POSTGRES_USER: ${DB_USERNAME}
+      POSTGRES_PASSWORD: ${DB_PASSWORD}
+      POSTGRES_DB: ${DB_DATABASE}
+    ports:
+      - "5432:5432"
+    volumes:
+      - postgres_data:/var/lib/postgresql/data  # Persistent storage
+    healthcheck:  # Verify database is ready
+      test: ["CMD-SHELL", "pg_isready -U ${DB_USERNAME} -d ${DB_DATABASE}"]
+      interval: 5s
+      timeout: 5s
+      retries: 5
+
+  pgadmin:
+    image: dpage/pgadmin4  # PostgreSQL web admin
+    environment:
+      PGADMIN_DEFAULT_EMAIL: ${PGADMIN_EMAIL}
+      PGADMIN_DEFAULT_PASSWORD: ${PGADMIN_PASSWORD}
+    ports:
+      - "8080:80"  # Access pgAdmin at http://localhost:8080
+    depends_on:
+      - postgres  # Require database
+
+  ollama:
+    image: ollama/ollama  # AI model service
+    ports:
+      - "${OLLAMA_PORT}:11434"  # Expose Ollama API
+    volumes:
+      - ollama_models:/root/.ollama  # Store AI models
+
+volumes:
+  postgres_data:  # Named volume for database persistence
+  ollama_models:  # Named volume for AI models
