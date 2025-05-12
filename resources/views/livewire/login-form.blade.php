@@ -1,8 +1,9 @@
 <div class="min-h-screen bg-gray-900 flex items-center justify-center p-4">
     <div class="w-full max-w-md bg-gray-800 rounded-lg shadow-lg p-8 space-y-6">
-        <h2 class="text-3xl font-bold text-center text-purple-400">Login</h2>
+        <h2 class="text-3xl font-bold text-center text-purple-400">Sign in</h2>
 
         <form wire:submit="login" class="space-y-6">
+            @csrf
             <div>
                 <label class="block text-gray-300 mb-2">Email</label>
                 <input type="email" wire:model="email"
@@ -24,11 +25,12 @@
                            transition-colors duration-200">
                 Login
             </button>
+            @error('submit') <span class="text-red-400 text-sm">{{ $message }}</span> @enderror
         </form>
 
         <p class="text-gray-400 text-center">
             Don't have an account?
-            <a href="{{ route('register') }}" class="text-purple-400 hover:text-purple-300">Register here</a>
+            <a href="{{ route('register') }}" class="text-purple-400 hover:text-purple-300">Sign up!</a>
         </p>
     </div>
 </div>

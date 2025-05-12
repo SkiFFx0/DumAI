@@ -6,12 +6,8 @@ Route::get('/', function () {
     return view('welcome');
 });
 
-Route::get('/register', function ()
-{
-    return view('register');
-})->name('register');
+Route::get('/register', function () {return view('register');})->name('register');
 
-Route::get('/login', function ()
-{
-    return view('login');
-})->name('login');
+Route::get('/login', function () {return view('login');})->name('login');
+
+Route::get('/chat', function () {return view('chat');})->name('chat');

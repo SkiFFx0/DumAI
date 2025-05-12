@@ -1,8 +1,9 @@
 <div class="min-h-screen bg-gray-900 flex items-center justify-center p-4">
     <div class="w-full max-w-md bg-gray-800 rounded-lg shadow-lg p-8 space-y-6">
-        <h2 class="text-3xl font-bold text-center text-purple-400">Register</h2>
+        <h2 class="text-3xl font-bold text-center text-purple-400">Sign up</h2>
 
         <form wire:submit="register" class="space-y-6">
+            @csrf
             <div>
                 <label class="block text-gray-300 mb-2">Name</label>
                 <input type="text" wire:model="name"
@@ -43,7 +44,7 @@
 
         <p class="text-gray-400 text-center">
             Already have an account?
-            <a href="{{ route('login') }}" class="text-purple-400 hover:text-purple-300">Login here</a>
+            <a href="{{ route('login') }}" class="text-purple-400 hover:text-purple-300">Sign in!</a>
         </p>
     </div>
 </div>

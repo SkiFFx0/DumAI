@@ -20,10 +20,10 @@ class LoginForm extends Component
         $this->validate();
 
         if (Auth::attempt(['email' => $this->email, 'password' => $this->password])) {
-            return redirect()->to('/dashboard');
+            return redirect()->route('chat');
         }
 
-        $this->addError('email', 'Invalid credentials');
+        $this->addError('submit', 'Invalid credentials');
     }
 
     public function render()

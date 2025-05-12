@@ -21,17 +21,13 @@ class RegisterForm extends Component
 
     public function register()
     {
-        $this->validate();
+        $validated = $this->validate();
 
-        $user = User::create([
-            'name' => $this->name,
-            'email' => $this->email,
-            'password' => bcrypt($this->password),
-        ]);
+        $user = User::create($validated);
 
         Auth::login($user);
 
-        return redirect()->to('/dashboard');
+        return redirect()->route('chat');
     }
 
     public function render()
