@@ -7,19 +7,20 @@ use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\SoftDeletes;
 
-class MessageHistory extends Model
+class Message extends Model
 {
     use HasFactory, SoftDeletes;
 
-    protected $table = 'message_histories';
+    protected $table = 'messages';
 
     protected $fillable = [
         'content',
-        'chat_history_id',
+        'is_user',
+        'chat_id',
     ];
 
-    public function chatHistory(): BelongsTo
+    public function chat(): BelongsTo
     {
-        return $this->belongsTo(ChatHistory::class);
+        return $this->belongsTo(Chat::class, 'chat_id', 'id');
     }
 }

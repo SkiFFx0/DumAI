@@ -2,14 +2,14 @@
 
 namespace Database\Factories;
 
-use App\Models\ChatHistory;
-use App\Models\MessageHistory;
+use App\Models\Chat;
+use App\Models\Message;
 use Illuminate\Database\Eloquent\Factories\Factory;
 use Illuminate\Support\Carbon;
 
 class MessageHistoryFactory extends Factory
 {
-    protected $model = MessageHistory::class;
+    protected $model = Message::class;
 
     public function definition(): array
     {
@@ -18,7 +18,7 @@ class MessageHistoryFactory extends Factory
             'created_at' => Carbon::now(),
             'updated_at' => Carbon::now(),
 
-            'chat_history_id' => ChatHistory::factory(),
+            'chat_history_id' => Chat::factory(),
         ];
     }
 }

@@ -8,12 +8,12 @@ return new class extends Migration
 {
     public function up(): void
     {
-        Schema::create('message_histories', function (Blueprint $table)
+        Schema::create('messages', function (Blueprint $table)
         {
             $table->id();
             $table->text('content');
             $table->boolean('is_user');
-            $table->foreignId('chat_history_id')->nullable()->constrained('chat_histories');
+            $table->foreignId('chat_id')->constrained('chats');
             $table->timestamps();
             $table->softDeletes();
         });

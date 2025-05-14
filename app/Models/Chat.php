@@ -8,11 +8,11 @@ use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Database\Eloquent\SoftDeletes;
 
-class ChatHistory extends Model
+class Chat extends Model
 {
     use HasFactory, SoftDeletes;
 
-    protected $table = 'chat_histories';
+    protected $table = 'chats';
 
     protected $fillable = [
         'title',
@@ -21,11 +21,20 @@ class ChatHistory extends Model
 
     public function user(): BelongsTo
     {
-        return $this->belongsTo(User::class);
+        return $this->belongsTo(User::class, 'user_id', 'id');
     }
 
     public function messages(): HasMany
     {
-        return $this->hasMany(MessageHistory::class);
+        return $this->hasMany(Message::class, 'chat_id', 'id');
+    }
+
+    public static function boot()
+    {
+        parent::boot();
+
+        static::creating(function ($chat) {
+            $chat->user_id = auth()->id();
+        });
     }
 }

@@ -2,14 +2,14 @@
 
 namespace Database\Factories;
 
-use App\Models\ChatHistory;
+use App\Models\Chat;
 use App\Models\User;
 use Illuminate\Database\Eloquent\Factories\Factory;
 use Illuminate\Support\Carbon;
 
 class ChatHistoryFactory extends Factory
 {
-    protected $model = ChatHistory::class;
+    protected $model = Chat::class;
 
     public function definition(): array
     {

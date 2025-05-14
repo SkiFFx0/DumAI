@@ -9,6 +9,6 @@
     <title>DumAI - Chat</title>
 </head>
 <body>
-    <livewire:chat />
+    <livewire:chat-component />
 </body>
 </html>
