@@ -82,7 +82,9 @@
     <!-- Main Chat Area -->
     <div class="flex-1 flex flex-col">
         <!-- Messages Container -->
-        <div class="flex-1 overflow-y-auto p-6" wire:key="messages-{{ $selectedChat?->id }}">
+        <div class="flex-1 overflow-y-auto p-6"
+             wire:key="messages-{{ $selectedChat?->id }}"
+             wire:poll.1s="checkAiResponse">
             <div class="mx-auto max-w-4xl space-y-6">
                 @if($selectedChat)
                     @foreach($messageHistory as $message)
@@ -101,17 +103,41 @@
                         @else
                             <!-- AI Message (Left-aligned) -->
                             <div class="flex space-x-4">
-                                <!-- AI Avatar Placeholder -->
-                                <div class="w-10 h-10 bg-purple-500 rounded-lg shrink-0"></div>
+                                <!-- AI Avatar -->
+                                <img
+                                    src="{{ asset($logoPath) }}"
+                                    alt="DumAI Logo"
+                                    class="w-8 h-8 rounded-lg object-contain"
+                                >
                                 <div class="bg-gray-800 p-4 rounded-lg border border-gray-700 flex-1">
                                     <p class="text-gray-100 whitespace-pre-wrap">{{ $message->content }}</p>
                                     <span class="text-xs text-gray-500 mt-2 block">
-                                {{ $message->created_at->format('g:i A') }}
-                            </span>
+                                        {{ $message->created_at->format('g:i A') }}
+                                    </span>
                                 </div>
                             </div>
                         @endif
                     @endforeach
+
+                    <!-- AI Loading Indicator -->
+                    @if($isAiResponding)
+                        <div class="flex space-x-4">
+                            <div class="w-10 h-10 bg-purple-500 rounded-lg shrink-0"></div>
+                            <div class="bg-gray-800 p-4 rounded-lg border border-gray-700 flex-1">
+                                <div class="flex items-center gap-2">
+                                    <div class="animate-pulse">
+                                        <div class="flex space-x-1">
+                                            <div class="w-2 h-2 bg-gray-400 rounded-full animate-bounce"></div>
+                                            <div class="w-2 h-2 bg-gray-400 rounded-full animate-bounce"
+                                                 style="animation-delay: 0.2s"></div>
+                                            <div class="w-2 h-2 bg-gray-400 rounded-full animate-bounce"
+                                                 style="animation-delay: 0.4s"></div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    @endif
                 @else
                     <div class="text-center text-gray-400 py-12">
                         Select a chat or start a new conversation
@@ -127,17 +153,20 @@
                     <input
                         wire:model="prompt"
                         placeholder="{{ $selectedChat ? 'Type your message...' : 'Start a new chat' }}"
+                        @disabled($isAiResponding)
                         class="w-full p-4 pr-12 bg-gray-800 border border-gray-700 rounded-lg text-gray-100
-                       focus:outline-none focus:border-purple-500 focus:ring-2 focus:ring-purple-500
-                       resize-y transition-colors whitespace-pre-wrap"
+                               focus:outline-none focus:border-purple-500 focus:ring-2 focus:ring-purple-500
+                               resize-y transition-colors whitespace-pre-wrap
+                               @if($isAiResponding) opacity-75 @endif"
                         @if(!$selectedChat) x-data
                         @keydown.enter.prevent="if($event.shiftKey) return; $wire.sendMessage()" @endif
                     >
                     <button
                         type="submit"
+                        @disabled($isAiResponding)
                         class="absolute right-3 bottom-3 p-2 bg-purple-600 hover:bg-purple-700 rounded-lg
-                       transition-colors duration-200 focus:outline-none focus:ring-2 focus:ring-purple-500"
-                        :disabled="!$wire.selectedChat && !$wire.message"
+                               transition-colors duration-200 focus:outline-none focus:ring-2 focus:ring-purple-500
+                               @if($isAiResponding) opacity-75 cursor-not-allowed @endif"
                     >
                         <svg class="w-5 h-5 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"

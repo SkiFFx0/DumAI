@@ -2,23 +2,22 @@
 
 namespace App\Livewire;
 
+use App\Jobs\ProcessAiResponse;
 use App\Models\Chat;
 use App\Models\Message;
-use Cloudstudio\Ollama\Facades\Ollama;
 use Illuminate\Support\Facades\Auth;
 use Livewire\Component;
 
 class ChatComponent extends Component
 {
-    // Component Properties
     public $logoPath = 'images/logo.png';
     public $sidebarOpen = true;
     public $selectedChat = null;
     public $chats;
     public $messageHistory;
     public $prompt;
+    public $isAiResponding = false; // Track AI response state
 
-    // Initial component setup
     public function mount()
     {
         if (Auth::id() === null)
@@ -26,6 +25,11 @@ class ChatComponent extends Component
             return redirect()->route('login');
         }
 
+        $this->loadChats();
+    }
+
+    protected function loadChats()
+    {
         $this->chats = Chat::where('user_id', Auth::id())
             ->orderByDesc('created_at')
             ->get();
@@ -76,23 +80,34 @@ class ChatComponent extends Component
             $this->chats->prepend($this->selectedChat);
         }
 
+        // Create user message
         Message::create([
             'content' => $validated['prompt'],
             'is_user' => true,
             'chat_id' => $this->selectedChat->id
         ]);
 
-        $aiResponse = (object) Ollama::prompt($validated['prompt'])->ask();
-
-        Message::create([
-            'content' => $aiResponse->response,
-            'is_user' => false,
-            'chat_id' => $this->selectedChat->id
-        ]);
-
-        // Keep messages as Collection
+        // Refresh messages to show user input immediately
         $this->messageHistory = $this->selectedChat->refresh()->messages;
+        $this->isAiResponding = true;
+
+        // Dispatch AI processing job
+        ProcessAiResponse::dispatch($this->selectedChat->id, $validated['prompt']);
+
         $this->prompt = '';
+    }
+
+    public function checkAiResponse()
+    {
+        if (!$this->isAiResponding) return;
+
+        $this->messageHistory = $this->selectedChat->refresh()->messages;
+
+        // Check if last message is AI response
+        if ($this->messageHistory->last()?->is_user === false)
+        {
+            $this->isAiResponding = false;
+        }
     }
 
     public function render()
