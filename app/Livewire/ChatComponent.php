@@ -14,14 +14,15 @@ class ChatComponent extends Component
     public $sidebarOpen = true;
     public $selectedChat = null;
     public $chats;
+    public $showSettingsModal = false;
     public $messageHistory;
     public $prompt;
-    public $isAiResponding = false; // Track AI response state
+    public $isAiResponding = false;
+    public $showProfileDropdown = false;
 
     public function mount()
     {
-        if (Auth::id() === null)
-        {
+        if (Auth::id() === null) {
             return redirect()->route('login');
         }
 
@@ -34,25 +35,21 @@ class ChatComponent extends Component
             ->orderByDesc('created_at')
             ->get();
 
-        if ($this->chats->isNotEmpty())
-        {
+        if ($this->chats->isNotEmpty()) {
             $this->selectChat($this->chats->first()->id);
         }
     }
 
-    // Sidebar toggle
     public function toggleSidebar()
     {
         $this->sidebarOpen = !$this->sidebarOpen;
     }
 
-    // Create new chat button
     public function createNewChat()
     {
         $this->selectedChat = null;
     }
 
-    // Chat selection handler
     public function selectChat($chatId)
     {
         $this->selectedChat = Chat::with('messages')
@@ -62,38 +59,47 @@ class ChatComponent extends Component
         $this->messageHistory = $this->selectedChat->messages;
     }
 
-    protected $rules = [
-        'prompt' => 'required|string|max:2000'
-    ];
+    public function toggleSettingsModal()
+    {
+        $this->showSettingsModal = !$this->showSettingsModal;
+    }
 
-    // Message sending handler
+    public function logout()
+    {
+        Auth::logout();
+        session()->invalidate();
+        session()->regenerateToken();
+        return redirect()->route('login');
+    }
+
+    protected function rules()
+    {
+        return [
+            'prompt' => 'required|string|max:2000'
+        ];
+    }
+
     public function sendMessage()
     {
         $validated = $this->validate();
 
-        if (!$this->selectedChat)
-        {
+        if (!$this->selectedChat) {
             $this->selectedChat = Chat::create([
-                'title' => 'New Chat',
+                'title' => $this->prompt,
                 'user_id' => Auth::id()
             ]);
             $this->chats->prepend($this->selectedChat);
         }
 
-        // Create user message
         Message::create([
             'content' => $validated['prompt'],
             'is_user' => true,
             'chat_id' => $this->selectedChat->id
         ]);
 
-        // Refresh messages to show user input immediately
         $this->messageHistory = $this->selectedChat->refresh()->messages;
         $this->isAiResponding = true;
-
-        // Dispatch AI processing job
         ProcessAiResponse::dispatch($this->selectedChat->id, $validated['prompt']);
-
         $this->prompt = '';
     }
 
@@ -103,9 +109,7 @@ class ChatComponent extends Component
 
         $this->messageHistory = $this->selectedChat->refresh()->messages;
 
-        // Check if last message is AI response
-        if ($this->messageHistory->last()?->is_user === false)
-        {
+        if ($this->messageHistory->last()?->is_user === false) {
             $this->isAiResponding = false;
         }
     }
