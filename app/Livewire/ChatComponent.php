@@ -22,11 +22,14 @@ class ChatComponent extends Component
 
     public function mount()
     {
-        if (Auth::id() === null) {
+        if (Auth::id() === null)
+        {
             return redirect()->route('login');
         }
 
         $this->loadChats();
+
+        $this->selectedChat = null;
     }
 
     protected function loadChats()
