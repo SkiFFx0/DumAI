@@ -139,7 +139,7 @@
         <!-- Messages Container -->
         <div class="flex-1 overflow-y-auto p-6"
              wire:key="messages-{{ $selectedChat?->id }}"
-             wire:poll.1s="checkAiResponse">
+             @if($isAiResponding) wire:poll.500ms="checkAiResponse" @endif>
             <div class="mx-auto max-w-4xl space-y-6">
                 @if($selectedChat)
                     @foreach($messageHistory as $message)

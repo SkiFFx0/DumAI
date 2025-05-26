@@ -21,10 +21,10 @@ class ProcessAiResponse implements ShouldQueue
 
     public function handle(): void
     {
-        $aiResponse = (object)Ollama::prompt($this->prompt)->ask();
+        $response = (object)Ollama::prompt($this->prompt)->model('gemma3:1b')->ask();
 
         Message::create([
-            'content' => $aiResponse->response,
+            'content' => $response->response,
             'is_user' => false,
             'chat_id' => $this->chatId
         ]);
