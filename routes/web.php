@@ -21,3 +21,8 @@ Route::get('/chat', function ()
 {
     return view('chat');
 })->name('chat');
+
+Route::get('/ollama-test', function ()
+{
+    return view('ollama-test');
+});
