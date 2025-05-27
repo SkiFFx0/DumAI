@@ -20,7 +20,6 @@
             <!-- Open State Content -->
             <div class="flex items-center gap-3 transition-all duration-300 ml-12"
                  x-show="$wire.sidebarOpen">
-                <!-- Logo display -->
                 <img
                     src="{{ asset($logoPath) }}"
                     alt="DumAI Logo"
@@ -40,7 +39,6 @@
             <!-- Closed State Content -->
             <div class="absolute left-4 top-16 flex flex-col gap-5 transition-all duration-300"
                  x-show="!$wire.sidebarOpen">
-                <!-- Logo display -->
                 <img
                     src="{{ asset($logoPath) }}"
                     alt="DumAI Logo"
@@ -62,13 +60,12 @@
             @forelse($chats as $chat)
                 <button
                     wire:click="selectChat({{ $chat->id }})"
-                    class="w-full p-2 text-gray-300 hover:bg-gray-700 rounded-lg cursor-pointer transition-colors truncate
-                   {{ $selectedChat?->id === $chat->id ? 'bg-gray-700' : '' }}"
-                    :class="$wire.sidebarOpen ? 'px-3' : 'px-2 text-center'"
+                    class="w-full p-2 text-gray-300 hover:bg-gray-700 rounded-lg cursor-pointer transition-colors truncate text-left
+                           {{ $selectedChat?->id === $chat->id ? 'bg-gray-700' : '' }}"
                 >
-            <span class="{{ $sidebarOpen ? 'block' : 'hidden' }}">
-                {{ Str::limit($chat->title, 22) }}
-            </span>
+                    <span class="{{ $sidebarOpen ? 'block' : 'hidden' }}">
+                        {{ Str::limit($chat->title, 22) }}
+                    </span>
                     <span class="{{ $sidebarOpen ? 'hidden' : 'block' }}">•</span>
                 </button>
             @empty
@@ -86,27 +83,25 @@
                     @click="open = !open"
                     class="w-full p-2 text-gray-300 hover:bg-gray-700 rounded-lg flex items-center gap-2 transition-colors"
                 >
-                    <!-- User Avatar Placeholder -->
-                    <div class="w-8 h-8 rounded-full bg-gray-600 flex items-center justify-center shrink-0">
-                        <svg class="w-5 h-5 text-gray-300" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                                  d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z"/>
-                        </svg>
-                    </div>
-                    <span x-show="$wire.sidebarOpen">My Profile</span>
+                    <img
+                        src="{{ Auth::user()->avatar ? asset('storage/' . Auth::user()->avatar) : asset('images/default-avatar.png') }}"
+                        alt="User Avatar"
+                        class="w-8 h-8 rounded-full object-cover shrink-0"
+                    />
+                    <span x-show="$wire.sidebarOpen"> {{ $name }} </span>
                 </button>
 
                 <!-- Dropdown Menu -->
                 <div
                     x-show="open"
                     @click.outside="open = false"
+                    class="absolute bottom-full mb-2 left-0 w-48 bg-gray-800 rounded-md shadow-lg z-20 border border-gray-700"
                     x-transition:enter="transition ease-out duration-100"
                     x-transition:enter-start="transform opacity-0 scale-95"
                     x-transition:enter-end="transform opacity-100 scale-100"
                     x-transition:leave="transition ease-in duration-75"
                     x-transition:leave-start="transform opacity-100 scale-100"
                     x-transition:leave-end="transform opacity-0 scale-95"
-                    class="absolute bottom-full mb-2 left-0 w-full bg-gray-800 rounded-md shadow-lg z-10 border border-gray-700"
                     x-cloak
                 >
                     <div class="py-1">
@@ -141,7 +136,7 @@
     <!-- Main Chat Area -->
     <div class="flex-1 flex flex-col">
         <!-- Messages Container -->
-        <div class="flex-1 overflow-y-auto p-6"
+        <div id="messages-container" class="flex-1 overflow-y-auto p-6"
              wire:key="messages-{{ $selectedChat?->id }}"
              @if($isAiResponding) wire:poll.500ms="checkAiResponse" @endif>
             <div class="mx-auto max-w-4xl space-y-6">
@@ -156,13 +151,15 @@
                                         {{ $message->created_at->format('g:i A') }}
                                     </span>
                                 </div>
-                                <!-- User Avatar Placeholder -->
-                                <div class="w-10 h-10 bg-gray-700 rounded-lg shrink-0"></div>
+                                <img
+                                    src="{{ Auth::user()->avatar ? asset('storage/' . Auth::user()->avatar) : asset('images/default-avatar.png') }}"
+                                    alt="User Avatar"
+                                    class="w-10 h-10 rounded-full object-cover shrink-0"
+                                />
                             </div>
                         @else
                             <!-- AI Message (Left-aligned) -->
                             <div class="flex space-x-4">
-                                <!-- AI Avatar -->
                                 <img
                                     src="{{ asset($logoPath) }}"
                                     alt="DumAI Logo"
@@ -242,8 +239,9 @@
 
     <!-- Settings Modal -->
     @if($showSettingsModal)
-        <div class="fixed inset-0 bg-black bg-opacity-50 z-50 flex items-center justify-center">
-            <div class="bg-gray-800 rounded-lg p-6 w-96">
+        <div class="fixed inset-0 bg-black bg-opacity-50 z-50 flex items-center justify-center"
+             wire:click="toggleSettingsModal">
+            <div class="bg-gray-800 rounded-lg p-6 w-96" wire:click.stop>
                 <div class="flex justify-between items-center mb-4">
                     <h3 class="text-xl font-semibold text-purple-400">Settings</h3>
                     <button wire:click="toggleSettingsModal" class="text-gray-400 hover:text-gray-200">
@@ -254,10 +252,121 @@
                     </button>
                 </div>
 
-                <!-- Empty settings content for now -->
-                <div class="text-gray-400 text-center py-8">
-                    Settings will be added here
+                <!-- Tab Navigation -->
+                <div class="flex border-b border-gray-700 mb-4">
+                    <button
+                        wire:click="$set('activeTab', 'profile')"
+                        class="px-4 py-2 text-sm font-medium {{ $activeTab === 'profile' ? 'text-purple-400 border-b-2 border-purple-400' : 'text-gray-400' }}"
+                    >
+                        Profile
+                    </button>
+                    <button
+                        wire:click="$set('activeTab', 'ai-model')"
+                        class="px-4 py-2 text-sm font-medium {{ $activeTab === 'ai-model' ? 'text-purple-400 border-b-2 border-purple-400' : 'text-gray-400' }}"
+                    >
+                        Model
+                    </button>
                 </div>
+
+                <!-- Tab Content -->
+                <div>
+                    @if($activeTab === 'profile')
+                        <!-- Profile Settings -->
+                        <div>
+                            <h4 class="text-lg font-semibold text-gray-200 mb-4">Profile Settings</h4>
+                            <!-- Avatar Upload -->
+                            <div class="mb-4">
+                                <label class="block text-sm font-medium text-gray-400 mb-2">Avatar</label>
+                                <div class="flex items-center gap-4">
+                                    <img
+                                        src="{{ $modalAvatar ? $modalAvatar->temporaryUrl() : (Auth::user()->avatar ? asset('storage/' . Auth::user()->avatar) : asset('images/default-avatar.png')) }}"
+                                        alt="Avatar Preview"
+                                        class="w-16 h-16 rounded-full object-cover"
+                                    >
+                                    <input
+                                        type="file"
+                                        wire:model="modalAvatar"
+                                        accept="image/*"
+                                        class="text-sm text-gray-400 file:mr-4 file:py-2 file:px-4 file:rounded-full file:border-0 file:text-sm file:font-semibold file:bg-purple-600 file:text-white hover:file:bg-purple-700"
+                                    >
+                                </div>
+                                @error('modalAvatar') <span class="text-red-500 text-sm">{{ $message }}</span> @enderror
+                            </div>
+                            <!-- Name -->
+                            <div class="mb-4">
+                                <label class="block text-sm font-medium text-gray-400 mb-2">Name</label>
+                                <input
+                                    type="text"
+                                    wire:model="modalName"
+                                    class="w-full p-2 bg-gray-700 border border-gray-600 rounded-lg text-gray-100 focus:outline-none focus:border-purple-500"
+                                >
+                                @error('modalName') <span class="text-red-500 text-sm">{{ $message }}</span> @enderror
+                            </div>
+
+                            <!-- Email -->
+                            <div class="mb-4">
+                                <label class="block text-sm font-medium text-gray-400 mb-2">Email</label>
+                                <input
+                                    type="email"
+                                    wire:model="modalEmail"
+                                    class="w-full p-2 bg-gray-700 border border-gray-600 rounded-lg text-gray-100 focus:outline-none focus:border-purple-500"
+                                >
+                                @error('modalEmail') <span class="text-red-500 text-sm">{{ $message }}</span> @enderror
+                            </div>
+
+                            <!-- Password -->
+                            <div class="mb-4">
+                                <label class="block text-sm font-medium text-gray-400 mb-2">New Password (leave blank to
+                                    keep current)</label>
+                                <input
+                                    type="password"
+                                    wire:model="modalPassword"
+                                    class="w-full p-2 bg-gray-700 border border-gray-600 rounded-lg text-gray-100 focus:outline-none focus:border-purple-500"
+                                >
+                                @error('modalPassword') <span
+                                    class="text-red-500 text-sm">{{ $message }}</span> @enderror
+                            </div>
+                        </div>
+                    @elseif($activeTab === 'ai-model')
+                        <!-- Model Settings -->
+                        <div>
+                            <h4 class="text-lg font-semibold text-gray-200 mb-4">Model Settings</h4>
+                            <!-- Assistant Personality -->
+                            <div class="mb-4">
+                                <label class="block text-sm font-medium text-gray-400 mb-2">Assistant
+                                    Personality</label>
+                                <textarea
+                                    wire:model="modalAgentPrompt"
+                                    class="w-full p-2 bg-gray-700 border border-gray-600 rounded-lg text-gray-100 focus:outline-none focus:border-purple-500"
+                                    rows="3"
+                                ></textarea>
+                                @error('modalAgentPrompt') <span
+                                    class="text-red-500 text-sm">{{ $message }}</span> @enderror
+                            </div>
+                            <!-- Creativity Level -->
+                            <div class="mb-4">
+                                <label class="block text-sm font-medium text-gray-400 mb-2">Creativity Level</label>
+                                <select
+                                    wire:model="modalTemperature"
+                                    class="w-full p-2 bg-gray-700 border border-gray-600 rounded-lg text-gray-100 focus:outline-none focus:border-purple-500"
+                                >
+                                    <option value="0">Stable</option>
+                                    <option value="0.5">Balanced</option>
+                                    <option value="1">Creative</option>
+                                </select>
+                                @error('modalTemperature') <span
+                                    class="text-red-500 text-sm">{{ $message }}</span> @enderror
+                            </div>
+                        </div>
+                    @endif
+                </div>
+                <!-- Unified Save Button -->
+                <button
+                    wire:click="saveSettings"
+                    class="mt-4 px-4 py-2 bg-purple-600 text-white rounded-lg hover:bg-purple-700"
+                >
+                    Save Settings
+                </button>
             </div>
         </div>
     @endif

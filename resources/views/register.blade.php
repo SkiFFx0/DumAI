@@ -9,6 +9,6 @@
     <title>DumAI - Sign up</title>
 </head>
 <body>
-    <livewire:register-form />
+<livewire:register-form/>
 </body>
 </html>

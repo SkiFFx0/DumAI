@@ -33,7 +33,8 @@ class Chat extends Model
     {
         parent::boot();
 
-        static::creating(function ($chat) {
+        static::creating(function ($chat)
+        {
             $chat->user_id = auth()->id();
         });
     }
