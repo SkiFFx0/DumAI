@@ -7,7 +7,6 @@ Route::get('/', function ()
     return view('welcome');
 });
 
-//TODO add github link
 Route::get('/register', function ()
 {
     return view('register');
