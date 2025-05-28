@@ -7,6 +7,7 @@ use Livewire\Component;
 
 class LoginForm extends Component
 {
+    public $logoPath = 'images/logo.png';
     public $email = '';
     public $password = '';
 

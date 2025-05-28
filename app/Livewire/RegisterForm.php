@@ -8,6 +8,7 @@ use Livewire\Component;
 
 class RegisterForm extends Component
 {
+    public $logoPath = 'images/logo.png';
     public $name = '';
     public $email = '';
     public $password = '';

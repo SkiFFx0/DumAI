@@ -8,7 +8,10 @@
     @vite('resources/css/app.css')
     <title>DumAI - Sign up</title>
 </head>
-<body>
-<livewire:register-form/>
+<body class="min-h-screen">
+<div class="flex flex-col lg:flex-row min-h-screen">
+    <livewire:left-side-description/>
+    <livewire:register-form/>
+</div>
 </body>
 </html>
