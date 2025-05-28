@@ -30,8 +30,10 @@
                     wire:click="createNewChat"
                     class="ml-auto w-8 h-8 bg-gray-700 hover:bg-gray-600 rounded-lg transition-colors flex items-center justify-center"
                 >
-                    <svg class="w-5 h-5 text-purple-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4"/>
+                    <svg class="w-5 h-5 text-purple-400" fill="currentColor" viewBox="0 0 20 20">
+                        <path fill-rule="evenodd"
+                              d="M10 3a1 1 0 011 1v5h5a1 1 0 110 2h-5v5a1 1 0 11-2 0v-5H4a1 1 0 110-2h5V4a1 1 0 011-1z"
+                              clip-rule="evenodd"/>
                     </svg>
                 </button>
             </div>
@@ -48,8 +50,10 @@
                     wire:click="createNewChat"
                     class="w-8 h-8 bg-gray-700 hover:bg-gray-600 rounded-lg transition-colors flex items-center justify-center"
                 >
-                    <svg class="w-5 h-5 text-purple-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4"/>
+                    <svg class="w-5 h-5 text-purple-400" fill="currentColor" viewBox="0 0 20 20">
+                        <path fill-rule="evenodd"
+                              d="M10 3a1 1 0 011 1v5h5a1 1 0 110 2h-5v5a1 1 0 11-2 0v-5H4a1 1 0 110-2h5V4a1 1 0 011-1z"
+                              clip-rule="evenodd"/>
                     </svg>
                 </button>
             </div>
@@ -84,9 +88,9 @@
                             @click="open = !open"
                             class="p-1 hover:bg-gray-600 rounded"
                         >
-                            <svg class="w-4 h-4 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                                      d="M12 5v.01M12 12v.01M12 19v.01M12 6a1 1 0 110-2 1 1 0 010 2zm0 7a1 1 0 110-2 1 1 0 010 2zm0 7a1 1 0 110-2 1 1 0 010 2z"/>
+                            <svg class="w-4 h-4 text-gray-400" fill="currentColor" viewBox="0 0 20 20">
+                                <path
+                                    d="M10 6a2 2 0 110-4 2 2 0 010 4zM10 12a2 2 0 110-4 2 2 0 010 4zM10 18a2 2 0 110-4 2 2 0 010 4z"/>
                             </svg>
                         </button>
                         <div
@@ -105,9 +109,9 @@
                                     wire:click="renameChat({{ $chat->id }})"
                                     class="w-full px-4 py-2 text-left text-gray-300 hover:bg-gray-700 flex items-center gap-2"
                                 >
-                                    <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                                              d="M15.232 5.232l3.536 3.536m-2.036-5.036a2.5 2.5 0 113.536 3.536L6.5 21.036H3v-3.572L16.732 3.732z"/>
+                                    <svg class="w-5 h-5" fill="currentColor" viewBox="0 0 20 20">
+                                        <path
+                                            d="M13.586 3.586a2 2 0 112.828 2.828l-.793.793-2.828-2.828.793-.793zM11.379 5.793L3 14.172V17h2.828l8.38-8.379-2.83-2.828z"/>
                                     </svg>
                                     Rename
                                 </button>
@@ -115,9 +119,9 @@
                                     wire:click="confirmDelete({{ $chat->id }})"
                                     class="w-full px-4 py-2 text-left text-gray-300 hover:bg-gray-700 flex items-center gap-2"
                                 >
-                                    <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                                              d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16"/>
+                                    <svg class="w-5 h-5" fill="currentColor" viewBox="0 0 20 20">
+                                        <path
+                                            d="M9 2a1 1 0 00-.894.553L7.382 4H4a1 1 0 000 2v10a2 2 0 002 2h8a2 2 0 002-2V6a1 1 0 100-2h-3.382l-.724-1.447A1 1 0 0011 2H9zM7 8a1 1 0 012 0v6a1 1 0 11-2 0V8zm5-1a1 1 0 00-1 1v6a1 1 0 102 0V8a1 1 0 00-1-1z"/>
                                     </svg>
                                     Delete
                                 </button>
@@ -166,11 +170,10 @@
                             wire:click="toggleSettingsModal"
                             class="w-full px-4 py-2 text-left text-gray-300 hover:bg-gray-700 flex items-center gap-2"
                         >
-                            <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                                      d="M10.325 4.317c.426-1.756 2.924-1.756 3.35 0a1.724 1.724 0 002.573 1.066c1.543-.94 3.31.826 2.37 2.37a1.724 1.724 0 001.065 2.572c1.756.426 1.756 2.924 0 3.35a1.724 1.724 0 00-1.066 2.573c.94 1.543-.826 3.31-2.37 2.37a1.724 1.724 0 00-2.572 1.065c-.426 1.756-2.924 1.756-3.35 0a1.724 1.724 0 00-2.573-1.066c-1.543.94-3.31-.826-2.37-2.37a1.724 1.724 0 00-1.065-2.572c-1.756-.426-1.756-2.924 0-3.35a1.724 1.724 0 001.066-2.573c-.94-1.543.826-3.31 2.37-2.37.996.608 2.296.07 2.572-1.065z"/>
-                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                                      d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"/>
+                            <svg class="w-5 h-5" fill="currentColor" viewBox="0 0 20 20">
+                                <path fill-rule="evenodd"
+                                      d="M11.49 3.17c-.38-1.56-2.6-1.56-2.98 0a1.532 1.532 0 01-2.286.948c-1.372-.836-2.942.734-2.106 2.106.54.886.061 2.042-.947 2.287-1.561.379-1.561 2.6 0 2.978a1.532 1.532 0 01.947 2.287c-.836 1.372.734 2.942 2.106 2.106a1.532 1.532 0 012.287.947c.379 1.561 2.6 1.561 2.978 0a1.532 1.532 0 012.287-.947c1.372.836 2.942-.734 2.106-2.106a1.532 1.532 0 01.947-2.287c1.561-.379 1.561-2.6 0-2.978a1.532 1.532 0 01-.947-2.287c.836-1.372-.734-2.942-2.106-2.106a1.532 1.532 0 01-2.287-.947zM10 13a3 3 0 100-6 3 3 0 000 6z"
+                                      clip-rule="evenodd"/>
                             </svg>
                             <span>Settings</span>
                         </button>
@@ -178,9 +181,10 @@
                             wire:click="logout"
                             class="w-full px-4 py-2 text-left text-gray-300 hover:bg-gray-700 flex items-center gap-2"
                         >
-                            <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                                      d="M17 16l4-4m0 0l-4-4m4 4H7m6 4v1a3 3 0 01-3 3H6a3 3 0 01-3-3V7a3 3 0 013-3h4a3 3 0 013 3v1"/>
+                            <svg class="w-5 h-5" fill="currentColor" viewBox="0 0 20 20">
+                                <path fill-rule="evenodd"
+                                      d="M3 3a1 1 0 00-1 1v12a1 1 0 102 0V4a1 1 0 00-1-1zm10.293 9.293a1 1 0 001.414 1.414l3-3a1 1 0 000-1.414l-3-3a1 1 0 10-1.414 1.414L14.586 9H7a1 1 0 100 2h7.586l-1.293 1.293z"
+                                      clip-rule="evenodd"/>
                             </svg>
                             <span>Logout</span>
                         </button>
@@ -201,11 +205,12 @@
                     @foreach($messageHistory as $message)
                         @if($message->is_user)
                             <!-- User Message (Right-aligned) -->
-                            <div class="flex space-x-4 justify-end">
-                                <div class="bg-purple-600 p-4 rounded-lg border border-purple-700 max-w-[85%]">
+                            <div class="flex space-x-4 justify-end animate-fade-in-up">
+                                <div
+                                    class="bg-gradient-to-r from-purple-600 to-indigo-600 p-4 rounded-lg shadow-md max-w-[85%]">
                                     <p class="text-gray-100 whitespace-pre-wrap">{{ $message->content }}</p>
                                     <span class="text-xs text-purple-300 mt-2 block">
-                                        {{ $message->created_at->format('g:i A') }}
+                                        {{ $message->created_at->addHours(5)->format('H:i') }}
                                     </span>
                                 </div>
                                 <img
@@ -216,16 +221,16 @@
                             </div>
                         @else
                             <!-- AI Message (Left-aligned) -->
-                            <div class="flex space-x-4">
+                            <div class="flex space-x-4 animate-fade-in-up">
                                 <img
                                     src="{{ asset($logoPath) }}"
                                     alt="DumAI Logo"
                                     class="w-8 h-8 rounded-lg object-contain"
                                 >
-                                <div class="bg-gray-800 p-4 rounded-lg border border-gray-700 flex-1">
-                                    <p class="text-gray-100 whitespace-pre-wrap">{{ $message->content }}</p>
+                                <div class="p-4">
+                                    <p class="text-gray-300 whitespace-pre-wrap">{{ $message->content }}</p>
                                     <span class="text-xs text-gray-500 mt-2 block">
-                                        {{ $message->created_at->format('g:i A') }}
+                                        {{ $message->created_at->addHours(5)->format('H:i') }}
                                     </span>
                                 </div>
                             </div>
@@ -240,7 +245,7 @@
                                 alt="DumAI Logo"
                                 class="w-8 h-8 rounded-lg object-contain"
                             >
-                            <div class="bg-gray-800 p-4 rounded-lg border border-gray-700 flex-1">
+                            <div class="p-4">
                                 <div class="flex items-center gap-2">
                                     <div class="animate-pulse">
                                         <div class="flex space-x-1">
@@ -272,7 +277,7 @@
                         placeholder="{{ $selectedChat ? 'Type your message...' : 'Start a new chat' }}"
                         @disabled($isAiResponding)
                         @keydown.enter.prevent="$event.shiftKey || $wire.sendMessage()"
-                        class="w-full p-4 pr-12 bg-gray-800 border border-gray-700 rounded-lg text-gray-100
+                        class="w-full p-4 pr-12 bg-gray-800 border border-gray-700 rounded-lg text-gray-100 shadow-md
            focus:outline-none focus:border-purple-500 focus:ring-2 focus:ring-purple-500
            resize-y transition-colors whitespace-pre-wrap
            @if($isAiResponding) opacity-75 @endif"
@@ -280,7 +285,7 @@
                     <button
                         type="submit"
                         @disabled($isAiResponding)
-                        class="absolute right-3 bottom-3 p-2 bg-purple-600 hover:bg-purple-700 rounded-lg
+                        class="absolute right-3 bottom-3 p-3 bg-purple-600 hover:bg-purple-700 rounded-full
                                transition-colors duration-200 focus:outline-none focus:ring-2 focus:ring-purple-500
                                @if($isAiResponding) opacity-75 cursor-not-allowed @endif"
                     >
@@ -296,9 +301,9 @@
 
     <!-- Settings Modal -->
     @if($showSettingsModal)
-        <div class="fixed inset-0 bg-black bg-opacity-50 z-50 flex items-center justify-center"
+        <div class="fixed inset-0 bg-black bg-opacity-50 z-50 flex items-center justify-center animate-fade-in"
              wire:click="toggleSettingsModal">
-            <div class="bg-gray-800 rounded-lg p-6 w-96" wire:click.stop>
+            <div class="bg-gray-800 rounded-lg p-6 w-96 animate-fade-in-up" wire:click.stop>
                 <div class="flex justify-between items-center mb-4">
                     <h3 class="text-xl font-semibold text-purple-400">Settings</h3>
                     <button wire:click="toggleSettingsModal" class="text-gray-400 hover:text-gray-200">
@@ -430,9 +435,9 @@
 
     <!-- Delete Confirmation Modal -->
     @if($showDeleteModal)
-        <div class="fixed inset-0 bg-black bg-opacity-50 z-50 flex items-center justify-center"
+        <div class="fixed inset-0 bg-black bg-opacity-50 z-50 flex items-center justify-center animate-fade-in"
              wire:click="cancelDelete">
-            <div class="bg-gray-800 rounded-lg p-6 w-96" wire:click.stop>
+            <div class="bg-gray-800 rounded-lg p-6 w-96 animate-fade-in-up" wire:click.stop>
                 <h3 class="text-xl font-semibold text-purple-400 mb-4">Delete Chat</h3>
                 <p class="text-gray-300 mb-6">Are you sure you want to delete this chat? This action cannot be
                     undone.</p>

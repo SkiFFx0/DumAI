@@ -34,8 +34,6 @@ class ChatComponent extends Component
     public $modalAgentPrompt;
     public $modalTemperature;
     public $modalAvatar;
-
-    // Новые свойства для переименования и удаления
     public $renamingChatId = null;
     public $tempTitle;
     public $deletingChatId = null;
