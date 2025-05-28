@@ -58,16 +58,73 @@
         <!-- Chat List -->
         <div class="flex-1 overflow-y-auto p-2 space-y-1" x-show="$wire.sidebarOpen">
             @forelse($chats as $chat)
-                <button
-                    wire:click="selectChat({{ $chat->id }})"
-                    class="w-full p-2 text-gray-300 hover:bg-gray-700 rounded-lg cursor-pointer transition-colors truncate text-left
-                           {{ $selectedChat?->id === $chat->id ? 'bg-gray-700' : '' }}"
-                >
-                    <span class="{{ $sidebarOpen ? 'block' : 'hidden' }}">
-                        {{ Str::limit($chat->title, 22) }}
-                    </span>
-                    <span class="{{ $sidebarOpen ? 'hidden' : 'block' }}">•</span>
-                </button>
+                <div
+                    class="flex items-center justify-between w-full p-2 text-gray-300 hover:bg-gray-700 rounded-lg transition-colors {{ $selectedChat?->id === $chat->id ? 'bg-gray-700' : '' }}"
+                    wire:key="chat-{{ $chat->id }}">
+                    @if($renamingChatId === $chat->id)
+                        <input
+                            type="text"
+                            wire:model="tempTitle"
+                            wire:keydown.enter="saveRename"
+                            wire:blur="cancelRename"
+                            class="flex-1 p-1 bg-gray-700 border border-gray-600 rounded text-gray-100 focus:outline-none focus:border-purple-500"
+                            autofocus
+                            x-init="$el.select()"
+                        >
+                    @else
+                        <button
+                            wire:click="selectChat({{ $chat->id }})"
+                            class="flex-1 text-left truncate"
+                        >
+                            {{ Str::limit($chat->title, 22) }}
+                        </button>
+                    @endif
+                    <div class="relative" x-data="{ open: false }">
+                        <button
+                            @click="open = !open"
+                            class="p-1 hover:bg-gray-600 rounded"
+                        >
+                            <svg class="w-4 h-4 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                      d="M12 5v.01M12 12v.01M12 19v.01M12 6a1 1 0 110-2 1 1 0 010 2zm0 7a1 1 0 110-2 1 1 0 010 2zm0 7a1 1 0 110-2 1 1 0 010 2z"/>
+                            </svg>
+                        </button>
+                        <div
+                            x-show="open"
+                            @click.outside="open = false"
+                            class="absolute right-0 mt-2 w-48 bg-gray-800 rounded-md shadow-lg z-20 border border-gray-700"
+                            x-transition:enter="transition ease-out duration-100"
+                            x-transition:enter-start="transform opacity-0 scale-95"
+                            x-transition:enter-end="transform opacity-100 scale-100"
+                            x-transition:leave="transition ease-in duration-75"
+                            x-transition:leave-start="transform opacity-100 scale-100"
+                            x-transition:leave-end="transform opacity-0 scale-95"
+                        >
+                            <div class="py-1">
+                                <button
+                                    wire:click="renameChat({{ $chat->id }})"
+                                    class="w-full px-4 py-2 text-left text-gray-300 hover:bg-gray-700 flex items-center gap-2"
+                                >
+                                    <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                              d="M15.232 5.232l3.536 3.536m-2.036-5.036a2.5 2.5 0 113.536 3.536L6.5 21.036H3v-3.572L16.732 3.732z"/>
+                                    </svg>
+                                    Rename
+                                </button>
+                                <button
+                                    wire:click="confirmDelete({{ $chat->id }})"
+                                    class="w-full px-4 py-2 text-left text-gray-300 hover:bg-gray-700 flex items-center gap-2"
+                                >
+                                    <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                              d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16"/>
+                                    </svg>
+                                    Delete
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
             @empty
                 <div class="text-gray-500 text-center py-4" x-show="$wire.sidebarOpen">
                     No chat history found
@@ -367,6 +424,32 @@
                 >
                     Save Settings
                 </button>
+            </div>
+        </div>
+    @endif
+
+    <!-- Delete Confirmation Modal -->
+    @if($showDeleteModal)
+        <div class="fixed inset-0 bg-black bg-opacity-50 z-50 flex items-center justify-center"
+             wire:click="cancelDelete">
+            <div class="bg-gray-800 rounded-lg p-6 w-96" wire:click.stop>
+                <h3 class="text-xl font-semibold text-purple-400 mb-4">Delete Chat</h3>
+                <p class="text-gray-300 mb-6">Are you sure you want to delete this chat? This action cannot be
+                    undone.</p>
+                <div class="flex justify-end gap-4">
+                    <button
+                        wire:click="cancelDelete"
+                        class="px-4 py-2 bg-gray-600 text-white rounded-lg hover:bg-gray-700"
+                    >
+                        Cancel
+                    </button>
+                    <button
+                        wire:click="deleteChat"
+                        class="px-4 py-2 bg-red-600 text-white rounded-lg hover:bg-red-700"
+                    >
+                        Delete
+                    </button>
+                </div>
             </div>
         </div>
     @endif

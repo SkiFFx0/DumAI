@@ -35,6 +35,12 @@ class ChatComponent extends Component
     public $modalTemperature;
     public $modalAvatar;
 
+    // Новые свойства для переименования и удаления
+    public $renamingChatId = null;
+    public $tempTitle;
+    public $deletingChatId = null;
+    public $showDeleteModal = false;
+
     public function mount()
     {
         if (Auth::id() === null)
@@ -121,6 +127,7 @@ class ChatComponent extends Component
             'modalPassword' => 'nullable|string|min:8',
             'modalAgentPrompt' => 'nullable|string|max:50',
             'modalTemperature' => 'required|numeric|min:0|max:1',
+            'tempTitle' => 'required|string|max:255', // Валидация для переименования
         ];
     }
 
@@ -202,6 +209,55 @@ class ChatComponent extends Component
                 $this->isAiResponding = false;
             }
         }
+    }
+
+    // Методы для переименования чата
+    public function renameChat($chatId)
+    {
+        $this->renamingChatId = $chatId;
+        $chat = Chat::findOrFail($chatId);
+        $this->tempTitle = $chat->title;
+    }
+
+    public function saveRename()
+    {
+        $this->validateOnly('tempTitle');
+        $chat = Chat::findOrFail($this->renamingChatId);
+        $chat->title = $this->tempTitle;
+        $chat->save();
+        $this->renamingChatId = null;
+        $this->loadChats();
+    }
+
+    public function cancelRename()
+    {
+        $this->renamingChatId = null;
+    }
+
+    // Методы для удаления чата
+    public function confirmDelete($chatId)
+    {
+        $this->deletingChatId = $chatId;
+        $this->showDeleteModal = true;
+    }
+
+    public function deleteChat()
+    {
+        $chat = Chat::findOrFail($this->deletingChatId);
+        $chat->delete();
+        $this->deletingChatId = null;
+        $this->showDeleteModal = false;
+        $this->loadChats();
+        if ($this->selectedChat && $this->selectedChat->id === $chat->id)
+        {
+            $this->selectedChat = null;
+        }
+    }
+
+    public function cancelDelete()
+    {
+        $this->deletingChatId = null;
+        $this->showDeleteModal = false;
     }
 
     public function render()
