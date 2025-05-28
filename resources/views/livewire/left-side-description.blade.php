@@ -1,16 +1,13 @@
 <div class="w-full lg:w-1/2 bg-gradient-to-br from-purple-900 via-purple-800 to-gray-900 p-8 lg:p-12 flex flex-col relative overflow-hidden">
-    <!-- Decorative elements -->
     <div class="absolute -right-20 -top-20 w-64 h-64 rounded-full bg-purple-800 opacity-20 blur-xl"></div>
     <div class="absolute left-0 bottom-0 w-32 h-32 rounded-full bg-pink-600 opacity-10 blur-lg"></div>
 
-    <!-- Glowing dots -->
     <div class="absolute right-1/3 top-1/4 w-2 h-2 rounded-full bg-purple-400 animate-pulse"></div>
     <div class="absolute left-1/4 bottom-1/3 w-3 h-3 rounded-full bg-pink-300 opacity-70 animate-pulse delay-300"></div>
 
     <div class="relative z-10">
         <div class="flex items-center space-x-4 mb-12">
             <div class="relative">
-                <!-- Добавлен overflow-hidden и размеры для точного круга -->
                 <div class="w-14 h-14 rounded-full overflow-hidden border-2 border-purple-400/30">
                     <img src="{{ $logoPath }}" alt="DumAI Logo"
                          class="w-full h-full object-cover">

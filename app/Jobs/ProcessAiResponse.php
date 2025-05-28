@@ -34,7 +34,7 @@ class ProcessAiResponse implements ShouldQueue
         $contextMessages = [];
         if ($chatMessages->count() >= 2)
         {
-            $contextMessages = $chatMessages->slice(-4)->values(); // Last two pairs (user + AI)
+            $contextMessages = $chatMessages->slice(-4)->values();
         } elseif ($chatMessages->count() == 1)
         {
             $contextMessages = $chatMessages->take(1);

@@ -125,7 +125,7 @@ class ChatComponent extends Component
             'modalPassword' => 'nullable|string|min:8',
             'modalAgentPrompt' => 'nullable|string|max:50',
             'modalTemperature' => 'required|numeric|min:0|max:1',
-            'tempTitle' => 'required|string|max:255', // Валидация для переименования
+            'tempTitle' => 'required|string|max:255',
         ];
     }
 
@@ -209,7 +209,6 @@ class ChatComponent extends Component
         }
     }
 
-    // Методы для переименования чата
     public function renameChat($chatId)
     {
         $this->renamingChatId = $chatId;
@@ -232,7 +231,6 @@ class ChatComponent extends Component
         $this->renamingChatId = null;
     }
 
-    // Методы для удаления чата
     public function confirmDelete($chatId)
     {
         $this->deletingChatId = $chatId;
